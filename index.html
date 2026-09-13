@@ -2,214 +2,209 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>★ 古早味社交小站 ★</title>
-    <!-- 引入 Supabase 官方 SDK -->
+    <title>★ 赛博 2000·QQ 空间全能版 ★</title>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        body {
-            background-color: #008080;
-            font-family: "SimSun", "宋体", serif;
-            font-size: 12px;
-            color: #000;
-            margin: 20px auto;
-            width: 780px;
-        }
-        .window {
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 3px;
-            margin-bottom: 10px;
-        }
-        .title-bar {
-            background: linear-gradient(90deg, #000080, #1084d0);
-            color: white;
-            padding: 3px 6px;
-            font-weight: bold;
-        }
-        .window-body {
-            padding: 10px;
-            background: #ffffff;
-            border: 2px solid;
-            border-color: #808080 #ffffff #ffffff #808080;
-            margin-top: 3px;
-        }
+        body { background-color: #008080; font-family: "SimSun", "宋体", serif; font-size: 12px; margin: 15px auto; width: 850px; }
+        .window { background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 3px; margin-bottom: 10px; }
+        .title-bar { background: linear-gradient(90deg, #000080, #1084d0); color: white; padding: 3px 6px; font-weight: bold; }
+        .window-body { padding: 8px; background: #ffffff; border: 2px solid; border-color: #808080 #ffffff #ffffff #808080; margin-top: 3px; }
         .layout { display: flex; gap: 10px; }
-        sidebar { width: 240px; }
+        sidebar { width: 250px; }
         main { flex: 1; }
-        input, textarea, button {
-            font-family: "SimSun", "宋体", serif;
-            font-size: 12px;
-            margin: 2px 0;
-        }
-        button {
-            background: #c0c0c0;
-            border: 2px solid;
-            border-color: #ffffff #000000 #000000 #ffffff;
-            padding: 2px 8px;
-            cursor: pointer;
-        }
-        button:active {
-            border-color: #000000 #ffffff #ffffff #000000;
-        }
-        .post-item {
-            border-bottom: 1px dashed #808080;
-            padding: 8px 0;
-        }
-        .post-author { color: #000080; font-weight: bold; }
-        .post-time { color: #808080; font-size: 11px; }
+        input, textarea, select, button { font-family: "SimSun", "宋体", serif; font-size: 12px; margin: 2px 0; }
+        button { background: #c0c0c0; border: 2px solid; border-color: #ffffff #000000 #000000 #ffffff; padding: 2px 6px; cursor: pointer; }
+        button:active { border-color: #000000 #ffffff #ffffff #000000; }
+        .post-card { border-bottom: 2px groove #fff; padding: 10px 0; }
+        .post-header { display: flex; align-items: center; gap: 5px; color: #000080; font-weight: bold; }
+        .post-img { max-width: 100%; border: 1px solid #000; margin: 5px 0; display: block; }
+        .comment-box { background: #f0f0f0; border: 1px inset #808080; padding: 5px; margin-top: 5px; }
+        a { color: #0000ff; }
     </style>
 </head>
 <body>
 
 <div class="window">
-    <div class="title-bar">★ 古早味社交网络 - 欢迎大家注册入驻 ★</div>
+    <div class="title-bar">★ 赛博空间 - 全功能怀旧社交平台 ★</div>
 </div>
 
 <div class="layout">
-    <!-- 左侧：用户登录/注册面板 -->
     <sidebar>
+        <!-- 账号中心 -->
         <div class="window">
             <div class="title-bar">用户中心</div>
             <div class="window-body">
-                <!-- 未登录状态 -->
                 <div id="auth-box">
-                    <p><b>[ 登录 / 注册 ]</b></p>
-                    <label>邮箱：</label><br>
-                    <input type="email" id="email" style="width:90%"><br>
-                    <label>密码：</label><br>
-                    <input type="password" id="password" style="width:90%"><br><br>
-                    <button onclick="handleSignUp()">注册新账号</button>
+                    <label>邮箱：</label><br><input type="email" id="email" style="width:90%"><br>
+                    <label>密码：</label><br><input type="password" id="password" style="width:90%"><br>
+                    <label>选个经典头像：</label><br>
+                    <select id="avatar-select">
+                        <option value="🐧">🐧 经典企鹅</option>
+                        <option value="🐱">🐱 酷酷酷猫</option>
+                        <option value="🤖">🤖 赛博机器人</option>
+                        <option value="🌟">🌟 非主流闪星</option>
+                    </select><br><br>
+                    <button onclick="handleSignUp()">注册</button>
                     <button onclick="handleLogin()">登录</button>
                 </div>
-
-                <!-- 已登录状态 -->
                 <div id="user-box" style="display:none;">
-                    <p>欢迎回来，<br><b id="user-email" class="post-author"></b>！</p>
+                    <p><span id="my-avatar" style="font-size:18px;"></span> 尊贵贵宾：<br><b id="user-email" style="color:#000080;"></b></p>
                     <button onclick="handleLogout()">退出登录</button>
                 </div>
             </div>
         </div>
-    </sidebar>
 
-    <!-- 右侧：发布与公共广场 -->
-    <main>
-        <!-- 发布框 -->
+        <!-- 复古音乐播放器 -->
         <div class="window">
-            <div class="title-bar">发表新动态</div>
-            <div class="window-body">
-                <textarea id="post-content" rows="3" style="width:98%" placeholder="写点什么吧，大家都能看到..."></textarea><br>
-                <button onclick="handlePublish()">发布动态</button>
+            <div class="title-bar">🎵 背景音乐播放器</div>
+            <div class="window-body" style="text-align: center;">
+                <p><b>正在播放：周杰伦 - 晴天</b></p>
+                <audio controls style="width: 100%; height: 30px;">
+                    <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+                    你的浏览器不支持音乐播放。
+                </audio>
+                <p style="color:#808080; font-size:11px;">(经典 MP3 播放挂件已激活)</p>
             </div>
         </div>
 
-        <!-- 动态广场列表 -->
+        <!-- 聊天室挂件 -->
         <div class="window">
-            <div class="title-bar">公共广场动态</div>
-            <div class="window-body" id="posts-list">
-                <p>正在加载公共广场动态...</p>
+            <div class="title-bar">💬 公共聊天室</div>
+            <div class="window-body">
+                <div id="chat-hall" style="height: 100px; overflow-y: scroll; border: 1px inset #808080; background: #fff; padding: 4px; font-size: 11px;">
+                    <p><b>系统：</b>欢迎进入空间大堂聊天室！</p>
+                </div>
+                <input type="text" id="chat-msg" style="width: 70%;" placeholder="随便聊聊...">
+                <button onclick="sendChat()">发送</button>
             </div>
+        </div>
+    </sidebar>
+
+    <main>
+        <!-- 发表动态 -->
+        <div class="window">
+            <div class="title-bar">发表说说 / 带图日志</div>
+            <div class="window-body">
+                <textarea id="post-content" rows="3" style="width:98%" placeholder="踩踩我的空间吧，写下你的心情..."></textarea><br>
+                <label>配图网址 (可选/可填网络图片URL)：</label><br>
+                <input type="text" id="post-img" style="width:98%" placeholder="https://..."><br>
+                <button onclick="handlePublish()">发布说说</button>
+            </div>
+        </div>
+
+        <!-- 动态广场 -->
+        <div class="window">
+            <div class="title-bar">好友广场动态</div>
+            <div class="window-body" id="posts-list">正在加载动态...</div>
         </div>
     </main>
 </div>
 
 <script>
-    // ⚠️ 替换成你自己在 Supabase 拿到的 URL 和 KEY ⚠️
     const SUPABASE_URL = 'https://dspjvqladjtwcnogiuch.supabase.co';
     const SUPABASE_KEY = 'sb_publishable_7gWOS_PBaRe8vQbJF1FJTQ_i5ETsI9E';
-    
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // 页面加载时检查登录状态并获取动态
-    window.onload = async () => {
-        checkUser();
-        loadPosts();
-    };
+    window.onload = () => { checkUser(); loadPosts(); };
 
-    // 检查登录状态
     async function checkUser() {
         const { data: { user } } = await _supabase.auth.getUser();
         if (user) {
             document.getElementById('auth-box').style.display = 'none';
             document.getElementById('user-box').style.display = 'block';
             document.getElementById('user-email').innerText = user.email;
+            document.getElementById('my-avatar').innerText = user.user_metadata?.avatar || '🐧';
         } else {
             document.getElementById('auth-box').style.display = 'block';
             document.getElementById('user-box').style.display = 'none';
         }
     }
 
-    // 注册账号
     async function handleSignUp() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
-        const { error } = await _supabase.auth.signUp({ email, password });
-        if (error) alert('注册失败: ' + error.message);
-        else alert('注册成功！如果开启了邮箱验证，请去邮箱查收确认邮件。');
+        const avatar = document.getElementById('avatar-select').value;
+        const { error } = await _supabase.auth.signUp({ email, password, options: { data: { avatar } } });
+        if (error) alert(error.message); else alert('注册成功！快去登录吧！');
     }
 
-    // 登录
     async function handleLogin() {
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
         const { error } = await _supabase.auth.signInWithPassword({ email, password });
-        if (error) alert('登录失败: ' + error.message);
-        else {
-            alert('登录成功！');
-            checkUser();
-        }
+        if (error) alert(error.message); else { checkUser(); loadPosts(); }
     }
 
-    // 退出
-    async function handleLogout() {
-        await _supabase.auth.signOut();
-        checkUser();
-    }
+    async function handleLogout() { await _supabase.auth.signOut(); checkUser(); }
 
-    // 发布动态（如果没有建表，先展示基本逻辑）
     async function handlePublish() {
         const { data: { user } } = await _supabase.auth.getUser();
-        if (!user) {
-            alert('请先登录再发动态！');
-            return;
-        }
+        if (!user) return alert('请先登录！');
         const content = document.getElementById('post-content').value;
-        if (!content) return alert('请输入内容！');
+        const img_url = document.getElementById('post-img').value;
+        const avatar = user.user_metadata?.avatar || '🐧';
 
-        // 提交数据到 Supabase 的 posts 表
-        const { error } = await _supabase.from('posts').insert([
-            { content: content, user_email: user.email }
-        ]);
-
-        if (error) {
-            alert('发布失败（可能尚未在数据库创建 posts 表）: ' + error.message);
-        } else {
+        const { error } = await _supabase.from('posts').insert([{ content, img_url, avatar, user_email: user.email }]);
+        if (error) alert(error.message);
+        else {
             document.getElementById('post-content').value = '';
+            document.getElementById('post-img').value = '';
             loadPosts();
         }
     }
 
-    // 加载广场动态
     async function loadPosts() {
-        const { data: posts, error } = await _supabase
-            .from('posts')
-            .select('*')
-            .order('created_at', { ascending: false });
-
+        const { data: posts } = await _supabase.from('posts').select('*').order('created_at', { ascending: false });
         const listDiv = document.getElementById('posts-list');
-        if (error || !posts) {
-            listDiv.innerHTML = '<p>暂时还没有动态，或者尚未建表。</p>';
-            return;
-        }
+        if (!posts || posts.length === 0) { listDiv.innerHTML = '<p>还没有动态，快发第一条！</p>'; return; }
 
-        listDiv.innerHTML = posts.map(p => `
-            <div class="post-item">
-                <span class="post-author">${p.user_email || '匿名用户'}</span>：
-                <span>${p.content}</span>
-            </div>
-        `).join('');
+        let html = '';
+        for (let p of posts) {
+            // 获取评论
+            const { data: comments } = await _supabase.from('comments').select('*').eq('post_id', p.id);
+            let commentsHtml = (comments || []).map(c => `<div><b>${c.user_email}</b>: ${c.content}</div>`).join('');
+
+            html += `
+                <div class="post-card">
+                    <div class="post-header"><span>${p.avatar || '🐧'}</span> ${p.user_email}</div>
+                    <p style="margin:5px 0;">${p.content}</p>
+                    ${p.img_url ? `<img src="${p.img_url}" class="post-img">` : ''}
+                    <div>
+                        <button onclick="likePost(${p.id}, ${p.likes || 0})">👍 赞 (${p.likes || 0})</button>
+                    </div>
+                    <div class="comment-box">
+                        <div id="comments-${p.id}">${commentsHtml}</div>
+                        <input type="text" id="input-com-${p.id}" style="width:70%" placeholder="踩踩留个言...">
+                        <button onclick="addComment(${p.id})">评论</button>
+                    </div>
+                </div>
+            `;
+        }
+        listDiv.innerHTML = html;
+    }
+
+    async function likePost(id, currentLikes) {
+        await _supabase.from('posts').update({ likes: currentLikes + 1 }).eq('id', id);
+        loadPosts();
+    }
+
+    async function addComment(postId) {
+        const { data: { user } } = await _supabase.auth.getUser();
+        if (!user) return alert('登录后才能评论！');
+        const content = document.getElementById(`input-com-${postId}`).value;
+        if (!content) return;
+        await _supabase.from('comments').insert([{ post_id: postId, user_email: user.email, content }]);
+        loadPosts();
+    }
+
+    function sendChat() {
+        const input = document.getElementById('chat-msg');
+        if (!input.value) return;
+        const hall = document.getElementById('chat-hall');
+        hall.innerHTML += `<p><b>路人:</b> ${input.value}</p>`;
+        hall.scrollTop = hall.scrollHeight;
+        input.value = '';
     }
 </script>
-
 </body>
 </html>
