@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>我的古早味个人小站</title>
+    <style>
+        /* 经典古早味样式 */
+        body {
+            background-color: #e6e6e6;
+            font-family: "SimSun", "宋体", serif;
+            font-size: 12px;
+            color: #000;
+            margin: 20px auto;
+            width: 750px;
+        }
+        #container {
+            background: #fff;
+            border: 2px ridge #999;
+            padding: 15px;
+        }
+        header {
+            text-align: center;
+            border-bottom: 1px dashed #666;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+        h1 {
+            font-size: 18px;
+            color: #000080;
+            margin: 5px;
+        }
+        marquee {
+            background: #ffffcc;
+            border: 1px solid #ffcc00;
+            padding: 3px;
+            margin-bottom: 10px;
+        }
+        .main {
+            display: flex;
+        }
+        sidebar {
+            width: 200px;
+            border-right: 1px dashed #ccc;
+            padding-right: 10px;
+        }
+        content {
+            flex: 1;
+            padding-left: 15px;
+        }
+        .box {
+            border: 1px solid #999;
+            background: #f9f9f9;
+            padding: 8px;
+            margin-bottom: 10px;
+        }
+        .box-title {
+            background: #000080;
+            color: #fff;
+            padding: 2px 5px;
+            font-weight: bold;
+        }
+        a { color: #0000ff; text-decoration: underline; }
+        a:hover { color: #ff0000; }
+        footer {
+            text-align: center;
+            margin-top: 15px;
+            border-top: 1px dashed #666;
+            padding-top: 10px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+<div id="container">
+    <header>
+        <h1>★ 欢迎来到我的个人秘密基地 ★</h1>
+        <div>[ <a href="#">首页</a> | <a href="#">我的文章</a> | <a href="#">相册</a> | <a href="#">留言板</a> ]</div>
+    </header>
+
+    <!-- 经典走马灯公告 -->
+    <marquee scrollamount="3">欢迎光临！今天心情不错，更新了一篇新日志... 记得去留言板踩踩哦！</marquee>
+
+    <div class="main">
+        <!-- 左侧栏 -->
+        <sidebar>
+            <div class="box">
+                <div class="box-title">个人档</div>
+                <p>博主：阿杰</p>
+                <p>状态：听歌中...</p>
+                <p>访问量：[ 000421 ]</p>
+            </div>
+            <div class="box">
+                <div class="box-title">友情链接</div>
+                <ul>
+                    <li><a href="#" target="_blank">小明的小窝</a></li>
+                    <li><a href="#" target="_blank">阿花的网志</a></li>
+                </ul>
+            </div>
+        </sidebar>
+
+        <!-- 右侧内容区 -->
+        <content>
+            <div class="box">
+                <div class="box-title">最新日志：今天天气真好 [2026-09-13]</div>
+                <p>今天折腾了一下，终于把这个古早味的小博客搭起来了！</p>
+                <p>感觉就像回到了小时候刚接触互联网那会儿，没有推送，没有算法，只有属于自己的一块小地方。</p>
+            </div>
+        </content>
+    </div>
+
+    <footer>
+        <p>Copyright © 2026 版权所有 | 建议使用 1024x768 屏幕分辨率浏览</p>
+    </footer>
+</div>
+
+</body>
+</html>
